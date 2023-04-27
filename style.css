@@ -17,13 +17,15 @@
 }
 
 .promptHub-multiselect {
-  background-color: #1f2937;
+  background-color: #1f2937 !important;
   border-style: solid;
   border-color: #374151;
   border-width: 1px !important;
   border-radius: 8px !important;
   background-image: none !important;
   padding-right: 0 !important;
+  color: rgb(229, 231, 235) !important;
+  width: 100%;
   /* margin-right: 12px; */
 }
 

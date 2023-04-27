@@ -1,3 +1,221 @@
+const uiHTML = `<div
+id="promptHub-section-history"
+style="margin-bottom: 1rem"
+class="flex flex-col relative col gap-4 gr-compact promptHub-section"
+>
+<input type="file" id="promptHub-file-input" accept=".json,application/json" />
+<div id="promptHub-history-toggle" class="w-full flex justify-between cursor-pointer">
+  <span class="promptHub-prompt-title"><strong>Prompt History</strong></span>
+  <span id="history-header-expansion-indicator" class="transition rotate-90">▼</span>
+</div>
+
+<div id="promptHub-history-container" class="hidden">
+  <div style="margin-top: 1rem">
+    <button
+      id="promptHub-history-save-current"
+      class="gr-button gr-button-sm gr-button-secondary"
+      title="Save the above positive and negative prompt"
+      style="display: block; margin: 0 auto"
+    >
+      📝&nbsp;
+      <span id="promptHub-history-current-label">Save Current txt2img Prompt</span>
+    </button>
+
+    <span>Positive</span>
+    <div class="flex row w-full">
+      <div class="promptHub-section-btn-container">
+        <button
+          id="promptHub-history-add-positive"
+          class="gr-button gr-button-lg gr-button-tool promptHub-prompt-btn"
+          title="Add selected style to positive prompt"
+        >
+          ➕
+        </button>
+        <button
+          id="promptHub-history-remove-positive"
+          class="gr-button gr-button-lg gr-button-tool promptHub-prompt-btn"
+          title="Remove the selected prompt from history"
+        >
+          🗑
+        </button>
+      </div>
+      <select id="promptHub-positive-history" class="promptHub-multiselect promptHub-resizable" size="4"></select>
+    </div>
+    <div class="flex row w-full flex-wrap gap-4" style="margin-top: 1rem">
+      <button
+        id="promptHub-history-save-positive"
+        class="gr-button gr-button-sm gr-button-secondary"
+        title="Save the selected prompt"
+      >
+        💾 Save Selected
+      </button>
+      <button
+        id="promptHub-history-reset-positive"
+        class="gr-button gr-button-sm gr-button-secondary"
+        title="Clear the positive prompt history"
+      >
+        ❌ Clear History
+      </button>
+      <button
+        id="promptHub-history-import-positive"
+        class="gr-button gr-button-sm gr-button-secondary"
+        title="Import a previous list of positive prompts from a file"
+      >
+        ⬆️ Import
+      </button>
+      <button
+        id="promptHub-history-export-positive"
+        class="gr-button gr-button-sm gr-button-secondary"
+        title="Export the list of positive prompts to a file"
+      >
+        ⬇️ Export
+      </button>
+    </div>
+  </div>
+
+  <div style="margin-top: 2rem">
+    <span>Negative</span>
+    <div class="flex row w-full">
+      <div class="promptHub-section-btn-container">
+        <button
+          id="promptHub-history-add-negative"
+          class="gr-button gr-button-lg gr-button-tool promptHub-prompt-btn"
+          title="Add selected style to positive prompt"
+        >
+          ➕
+        </button>
+        <button
+          id="promptHub-history-remove-negative"
+          class="gr-button gr-button-lg gr-button-tool promptHub-prompt-btn"
+          title="Remove the selected prompt from history"
+        >
+          🗑
+        </button>
+      </div>
+      <select id="promptHub-negative-history" class="promptHub-multiselect promptHub-resizable" size="4"></select>
+    </div>
+    <div class="flex row w-full flex-wrap gap-4" style="margin-top: 1rem">
+      <button
+        id="promptHub-history-save-negative"
+        class="gr-button gr-button-sm gr-button-secondary"
+        title="Save the selected prompt"
+      >
+        💾 Save Selected
+      </button>
+      <button
+        id="promptHub-history-reset-negative"
+        class="gr-button gr-button-sm gr-button-secondary"
+        title="Clear the negative prompt history"
+      >
+        ❌ Clear History
+      </button>
+      <button
+        id="promptHub-history-import-negative"
+        class="gr-button gr-button-sm gr-button-secondary"
+        title="Import a previous list of negative prompts from a file"
+      >
+        ⬆️ Import
+      </button>
+      <button
+        id="promptHub-history-export-negative"
+        class="gr-button gr-button-sm gr-button-secondary"
+        title="Export the list of negative prompts to a file"
+      >
+        ⬇️ Export
+      </button>
+    </div>
+  </div>
+
+  <button
+    id="promptHub-history-save-selected"
+    class="gr-button gr-button-sm gr-button-secondary"
+    title="Save the highlighted positive and negative prompt from the history list"
+    style="display: block; margin-top: 1.5rem; margin-left: auto; margin-right: auto"
+  >
+    ↕️ Save Selected History Prompts
+  </button>
+</div>
+</div>
+
+<div
+id="promptHub-section-saved"
+style="margin-bottom: 1rem"
+class="flex flex-col relative col gap-4 gr-compact promptHub-section"
+>
+<div id="promptHub-saved-toggle" class="w-full flex justify-between cursor-pointer">
+  <span class="promptHub-prompt-title"><strong>Saved Prompts</strong></span>
+  <span id="saved-header-expansion-indicator" class="transition rotate-90">▼</span>
+</div>
+
+<div id="promptHub-saved-container" class="hidden" style="margin-top: 1rem">
+  <div class="flex row w-full promptHub-resizable">
+    <select id="promptHub-saved-prompts" class="promptHub-multiselect promptHub-resizable" size="4"></select>
+  </div>
+  <div class="flex row w-full flex-wrap gap-4" style="margin-top: 1rem">
+    <button
+      id="promptHub-saved-import"
+      class="gr-button gr-button-sm gr-button-secondary"
+      title="Save the selected prompt"
+    >
+      ⬆️ Import
+    </button>
+    <button
+      id="promptHub-saved-export"
+      class="gr-button gr-button-sm gr-button-secondary"
+      title="Clear the negative prompt history"
+    >
+      ⬇️ Export
+    </button>
+    <button
+      id="promptHub-saved-rename"
+      class="gr-button gr-button-sm gr-button-secondary"
+      title="Import a previous list of negative prompts from a file"
+    >
+      ✏️ Rename Selected
+    </button>
+    <button
+      id="promptHub-saved-remove"
+      class="gr-button gr-button-sm gr-button-secondary"
+      title="Import a previous list of negative prompts from a file"
+    >
+      🗑 Remove Selected
+    </button>
+    <button
+      id="promptHub-saved-clear"
+      class="gr-button gr-button-sm gr-button-secondary"
+      title="Export the list of negative prompts to a file"
+    >
+      ❌ Clear Saved
+    </button>
+  </div>
+  <div class="flex row w-full flex row w-full flex-col promptHub-section promptHub-resizable">
+    <span class="promptHub-inline-text">Positive:</span>
+    <textarea class="promptHub-section" id="promptHub-saved-positive-input"></textarea>
+  </div>
+  <div class="flex row w-full flex row w-full flex-col promptHub-section promptHub-resizable">
+    <span class="promptHub-inline-text">Negative:</span>
+    <textarea class="promptHub-section" id="promptHub-saved-negative-input"></textarea>
+  </div>
+  <button
+    id="promptHub-saved-update"
+    class="gr-button gr-button-lg gr-button-secondary promptHub-hide-btn"
+    style="display: block; margin-top: 1rem; margin-bottom: 1rem; margin-left: auto; margin-right: auto"
+  >
+    💾 Save Prompt Changes?
+  </button>
+  <div class="flex row w-full flex-wrap gap-4" style="margin-top: 1rem">
+    <button id="promptHub-saved-apply-both" class="gr-button gr-button-sm gr-button-secondary">↕️ Apply Both</button>
+    <button id="promptHub-saved-apply-positive" class="gr-button gr-button-sm gr-button-secondary">
+      ➕ Apply Positive
+    </button>
+    <button id="promptHub-saved-apply-negative" class="gr-button gr-button-sm gr-button-secondary">
+      ➖ Apply Negative
+    </button>
+  </div>
+</div>
+</div>
+`
+
 promptHubSetup = {
   info: function (...data) {
     console.info("[promptHub]", ...data);
@@ -165,6 +383,9 @@ promptHubSetup = {
       .then((data) => {
         const uiParser = new DOMParser();
         const uiData = uiParser.parseFromString(data, "text/html");
+        const uiElement = uiData.createElement("div");
+        uiElement.innerHTML = uiHTML;
+        uiData.querySelector("gradio-app").appendChild(uiElement);
 
         promptHubSetup.els.historyUiContainer = uiData.querySelector("#promptHub-section-history");
         promptHubSetup.els.savedUiContainer = uiData.querySelector("#promptHub-section-saved");
@@ -395,8 +616,9 @@ promptHubSetup = {
 
   injectText2ImgPromptUI: function () {
     let t2iPositivePromptContainer = promptHubSetup.els.txt2ImgPromptContainer.querySelector(
-      "#txt2img_prompt_container div.flex.row.w-full:nth-of-type(1)"
+      "#txt2img_prompt > label > textarea"
     );
+    promptHubSetup.log(t2iPositivePromptContainer);
 
     const t2iPositiveBtnContainer = document.createElement("div");
     t2iPositiveBtnContainer.classList.add("promptHub-prompt-btn-container");
@@ -423,7 +645,7 @@ promptHubSetup = {
     t2iPositivePromptContainer.insertAdjacentElement("afterbegin", t2iPositiveBtnContainer);
 
     const t2iNegativePromptContainer = promptHubSetup.els.txt2ImgPromptContainer.querySelector(
-      "#txt2img_prompt_container div.flex.row.w-full:nth-of-type(2)"
+      "#txt2img_neg_prompt > label > textarea"
     );
 
     const t2iNegativeBtnContainer = document.createElement("div");
@@ -453,8 +675,9 @@ promptHubSetup = {
 
   injectImg2ImgPromptUI: function () {
     let i2iPositivePromptContainer = promptHubSetup.els.img2ImgPromptContainer.querySelector(
-      "#img2img_prompt_container div.flex.row.w-full:nth-of-type(1)"
+      "#img2img_prompt > label > textarea"
     );
+    promptHubSetup.info(promptHubSetup.els.img2ImgPromptContainer);
 
     const i2iPositiveBtnContainer = document.createElement("div");
     i2iPositiveBtnContainer.classList.add("promptHub-prompt-btn-container");
@@ -481,7 +704,7 @@ promptHubSetup = {
     i2iPositivePromptContainer.insertAdjacentElement("afterbegin", i2iPositiveBtnContainer);
 
     const i2iNegativePromptContainer = promptHubSetup.els.img2ImgPromptContainer.querySelector(
-      "#img2img_prompt_container div.flex.row.w-full:nth-of-type(2)"
+      "#img2img_neg_prompt > label > textarea"
     );
 
     const i2iNegativeBtnContainer = document.createElement("div");
